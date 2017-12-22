@@ -1,0 +1,30 @@
+body
+    {
+    
+    margin: 0;
+    padding: 0;
+    background: url(bg3.jpg);
+    background-size: cover;
+    font-family: sans-serif;
+    
+}
+.Mass-main
+{   
+    
+       transform: translate(70%,-1.5%);
+    width: 700px;
+    height: 600px;
+    box-sizing: border-box;
+    padding: 80px 40px;
+    background: rgba(255,255,255,1)
+}
+.Mass-pro
+{   
+        transform: translate(10%,-305%);
+    width: 400px;
+    height: 200px;
+    box-sizing: border-box;
+    padding: 80px 40px;
+    background: rgba(255,255,255,1)
+}
+

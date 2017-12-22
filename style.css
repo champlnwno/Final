@@ -1,0 +1,134 @@
+body
+{
+    
+    margin: 0;
+    padding: 0;
+    background: url(bg1.jpeg);
+    background-size: cover;
+    font-family: sans-serif;
+    
+}
+.container
+{
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%,-50%);
+    width: 700px;
+    height: 435px;
+    border-radius: 5px;
+/*    border: 10px solid rgba(255,255,255,.2);
+    box-shadow: 10px 10px 15px rgba(0,0,0,.5);*/
+}
+/*.imgBx
+{
+    width:350px;
+    height: 420px;   
+    overflow: hidden;
+    float: left;
+    background: rgba(150,150,150,.8)
+}*/
+.imgBx img
+{
+    position: absolute;
+    top: -20px;
+    left: 77%;
+    width: 15%;
+   
+}
+.loginBox
+{
+    float: right;
+    width: 350px;
+    height: 400px;
+    box-sizing: border-box;
+    padding: 80px 40px;
+    background: rgba(255,255,255,.8)
+}
+h3
+{       
+    margin: 0;
+    padding: 0 0 20px;
+    color: #262626;    
+}
+.loginBox input
+{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.loginBox input[type="text"],
+.loginBox input[type="password"]
+{
+    border: none;
+    border-bottom: 2px solid #262626;
+    outline: none;
+    height: 40px;
+    color: #262626;
+    background: transparent;
+    font-size: 16px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+::placeholder
+{
+    color: rgba(0,0,0,.5);
+}
+.inputbox
+{
+    position: relative;
+}
+.inputbox span
+{
+    position: absolute;
+    top: 10px;
+    color: #262626;
+}
+.loginBox input[type="submit"]
+{
+    border: none;
+    outline: none;
+    height: 40px;
+    font-size: 16px;
+    background: #ed292a;
+    color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.loginBox a
+{
+    color: #262626;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    
+}
+.picmove
+{
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(-125%,-55%);
+    width: 700px;
+    height: 475px;
+    border-radius: 6px;
+    border: 10px solid rgba(255,255,255,.2);
+    box-shadow: 10px 10px 15px rgba(0,0,0,.5);
+    background: rgba(255,255,255,.8)
+}
+.item img
+{  
+   width: 100%;
+   
+    
+}
+.style-re a{
+    width: 100px;
+    border: none;
+    outline: none;
+    height: 40px;
+    font-size: 14px;
+    background: #fff;
+    color: #0033FF;
+    border-style: 20px;
+    cursor: pointer;
+}
