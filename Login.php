@@ -15,10 +15,12 @@ if(isset($_POST['submit'])){
 
   $row = mysqli_fetch_assoc($query);
   
-    if(!empty($row)){
+    if(!empty($row) && $row['user_rule'] != 2){
       $_SESSION['user_id'] = $row['user_id'];
       $_SESSION['user_name'] = $row['user_name'];
       $_SESSION['user_email'] = $row['user_email'];
+      $_SESSION['user_avatar'] = $row['user_avatar'];
+      $_SESSION['user_rule'] = $row['user_rule'];
       header("Location:index.php");
     }else{
       echo"<script>alert('no account')</script>";

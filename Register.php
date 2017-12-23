@@ -19,8 +19,8 @@ if (isset($_POST['submit'])) {
            echo "<script>alert('ใส่ให้ครบ')</script>";
         }else {
             $user_pass= md5($user_pass);
-            $sql="INSERT INTO `account` (`user_id`, `user_name`, `user_pass`, `user_email`, `user_gender`, `user_age`) "
-            . "VALUES (NULL, '$user_name', '$user_pass', '$user_email', '$user_gender', '$user_age');";
+            $sql="INSERT INTO `account` (`user_id`, `user_name`, `user_pass`,`user_avatar`, `user_email`, `user_gender`, `user_age`, `user_datetime`) "
+            . "VALUES (NULL, '$user_name', '$user_pass', 'http://cliparts101.com/files/255/584403E66798177B2C8372146E9589BF/AwesomeLinux.png', '$user_email', '$user_gender', '$user_age', now());";
             $result= mysqli_query($link, $sql);
             if ($result) {
                 header("Location:index.php");                                                
