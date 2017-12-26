@@ -165,10 +165,13 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
       <div class="col-sm-12 ml-sm-auto blog-main">
         <div class="row">
           <div class="col-md-4" style="padding-right: 0;">
-            <img src="<?=$row['user_avatar']?>" class="img-thumbnail" width="300" alt="">
+            <img src="<?=$row['user_avatar']?>" class="img-thumbnail" style="width: 345px;height: 345px;" alt="">
+             <?php if ($row['user_id'] == $_SESSION['user_id']) {?>
+              <a data-toggle="modal" data-target="#<?=$_SESSION['user_id']?>" class="btn btn-outline-danger btn-md btn-block" style="margin: 15px 0">Change profile image</a>
+             <?php }?>
           </div>
           <div class="col-md-8  posts-label" style="padding-left: 5px;">
-            <h3>@<?=$row['user_name']?></h3>
+            <h3>@<?=$row['user_name']?></h3><br><br>
             <div class="row">
               <div class="col-md-4 posts-label" style="padding-right: 0;">
                 <h6 class="label-status">Posts</h6>
@@ -183,8 +186,9 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
                 <p><?=$rowfollowing['COUNT(*)']?></p>
               </div>
             </div>
+            <br>
             <?php if ($row['user_id'] == $_SESSION['user_id']) {?>
-              <a data-toggle="modal" data-target="#<?=$_SESSION['user_id']?>" class="btn btn-outline-danger btn-md btn-block" style="margin: 15px 0">Change profile image</a>
+              
             <?php }else{ if($rowd['COUNT(*)'] == 0){?>
               
               <form method="post">
@@ -199,19 +203,20 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
                 <input name="unfollower" class="btn btn-outline-danger btn-md btn-block" style="margin: 15px 0" type="submit" value="Unfollow">
               </form>
             <?php }} ?>
+            <?php if ($row['user_id'] == $_SESSION['user_id']) {?>
+       <div class="form-group">
+          <form method="post">
+            <textarea name="content" class="form-control" cols="47" rows="4.5" style="margin-top: 5px;" placeholder="What's happening?"></textarea>
+            <input type="submit" name="post_top" class="btn btn-block btn-md btn-danger" style="margin-top: 15px" value="Post">
+          </form>
+        </div>
+      <?php } ?>
           </div>
         </div>
 
 
 
-      <?php if ($row['user_id'] == $_SESSION['user_id']) {?>
-       <div class="form-group">
-          <form method="post">
-            <textarea name="content" class="form-control" cols="47" rows="3" placeholder="What's happening?"></textarea>
-            <input type="submit" name="post_top" class="btn btn-block btn-md btn-danger" style="margin-top: 15px" value="Post">
-          </form>
-        </div>
-      <?php } ?>
+      
         
         <?php 
         $sql = "SELECT * FROM `topic`
