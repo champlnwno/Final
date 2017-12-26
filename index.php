@@ -80,7 +80,7 @@ if (isset($_GET['user_id_follow'])) {
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
     crossorigin="anonymous">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <link href="stylemain.css" rel="stylesheet">
+  <link href="css/stylemain.css" rel="stylesheet">
 
 </head>
 
@@ -103,7 +103,7 @@ if (isset($_GET['user_id_follow'])) {
             </div>
           </div>
 
-          <div class="row">
+          <div class="row" style="margin-top: 20px;">
             <div class="col-md-4 posts-label" style="padding-right: 0;">
               <h6 class="label-status">Posts</h6>
               <p><?=$rowPost['COUNT(*)']?></p>

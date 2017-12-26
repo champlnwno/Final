@@ -87,6 +87,36 @@ if (isset($_POST['unlikenow'])) {
   $result= mysqli_query($link, $sql);
 
 }
+
+if (isset($_POST['changeimage'])) {
+                                
+$target_dir = "profiles/";
+$characters = '0123456789_-';
+  $randstring = '';
+  for ($i = 0; $i < 33; $i++) {
+      $randstring .= $characters[rand(0, strlen($characters))];
+  }
+$fileData = pathinfo(basename($_FILES["fileToUpload"]["name"]));
+$target_file = $target_dir . $randstring.'.'.$fileData['extension'];
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+
+    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            $sql="UPDATE `account` SET `user_avatar` = '$target_file' WHERE `account`.`user_id` = ".$_SESSION['user_id'].";";
+            $query= mysqli_query($link, $sql);
+            if ($query) {
+              header("Location:profile.php?u=".$row['user_name']."");                                       
+            }
+        }
+        
+    } else {
+        echo "File is not an image.";
+    }
+
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -98,7 +128,7 @@ if (isset($_POST['unlikenow'])) {
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
     crossorigin="anonymous">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <link href="stylemain.css" rel="stylesheet">
+  <link href="css/stylemain.css" rel="stylesheet">
 
 </head>
 
@@ -107,6 +137,27 @@ if (isset($_POST['unlikenow'])) {
   <?php include './include/nav.php'; ?>
 
   <main role="main" class="container">
+
+<div class="modal fade" id="<?=$_SESSION['user_id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change profile image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+              <input type="file" class="form-control-file" name="fileToUpload" id="fileToUpload">
+          </div>
+          <input type="submit" name="changeimage" class="btn btn-primary" value="Upload">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
     <div class="row">
 
@@ -133,7 +184,7 @@ if (isset($_POST['unlikenow'])) {
               </div>
             </div>
             <?php if ($row['user_id'] == $_SESSION['user_id']) {?>
-              <input class="btn btn-outline-danger btn-md btn-block" style="margin: 15px 0" type="button" value="Edit Profile">
+              <a data-toggle="modal" data-target="#<?=$_SESSION['user_id']?>" class="btn btn-outline-danger btn-md btn-block" style="margin: 15px 0">Change profile image</a>
             <?php }else{ if($rowd['COUNT(*)'] == 0){?>
               
               <form method="post">

@@ -33,19 +33,19 @@ if(isset($_POST['submit'])){
   <title>Field smile</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
     crossorigin="anonymous">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="stylemain.css" rel="stylesheet">
 </head>
 
-<body style="background: url('./bg1.jpeg');background-size: cover;">
+<body style="background: url('./pic/bg1.jpeg');background-size: cover;">
 
 <?php include './include/nav.php'; ?>
   <div class="container">
     <div class="imgBx">
-      <img src="LOGOWAB1.png">
+      <img src="pic/LOGOWAB1.png">
     </div>
     <div class="loginBox">
 

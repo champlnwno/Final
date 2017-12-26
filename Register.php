@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
         <meta charset="UTF-8">
         <title>REGISTER</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="Styleregister.css">
+        <link rel="stylesheet" href="css/Styleregister.css">
       
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
             crossorigin="anonymous">
@@ -48,6 +48,7 @@ if (isset($_POST['submit'])) {
         <div>
             <div class="modal-body">
                 <div class="modal-re">
+                
                     <h4>REGISTER</h4>
                     <form method="POST"> 
                     <input type="text" name="user_name" size="35"placeholder="User Name"><br><br>
