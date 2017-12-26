@@ -93,31 +93,54 @@ if (isset($_GET['user_id_follow'])) {
     <div class="row">
       <aside class="col-sm-4 blog-sidebar">
         <div class="sidebar-module sidebar-module-inset">
-          <div class="row">
-            <div class="col-md-5" style="padding-right: 0;">
-              <a href="./profile.php?u=<?=$_SESSION['user_name']?>"><img src="<?=$_SESSION['user_avatar']?>" class="img-thumbnail" alt=""></a>
-            </div>
-            <div class="col-md-7" style="padding-left: 5px;">
-              <h6>@<?=$_SESSION['user_name']?></h6>
-              <small><?=$_SESSION['user_email']?></small>
-            </div>
-          </div>
+          
+  <div class="row">
+        <div class="col-md-12">
+        <a class="twPc-bg twPc-block"></a>
+        <a href="./profile.php?u=<?=$_SESSION['user_name']?>" class="twPc-avatarLink">
+			<img src="<?=$_SESSION['user_avatar']?>" class="twPc-avatarImg">
+		</a>
 
-          <div class="row" style="margin-top: 20px;">
-            <div class="col-md-4 posts-label" style="padding-right: 0;">
-              <h6 class="label-status">Posts</h6>
-              <p><?=$rowPost['COUNT(*)']?></p>
-            </div>
-            <div class="col-md-4 posts-label" style="padding-left: 5px;">
-              <h6 class="label-status">Follower</h6>
-              <p><?=$rowfollower['COUNT(*)']?></p>
-            </div>
-            <div class="col-md-4 posts-label" style="padding-left: 5px;">
-              <h6 class="label-status">Following</h6>
-              <p><?=$rowfollowing['COUNT(*)']?></p>
-            </div>
-          </div>
+		<div class="twPc-divUser">
+			<div class="twPc-divName">
+				<a href="./profile.php?u=<?=$_SESSION['user_name']?>">@<?=$_SESSION['user_name']?></a>
+			</div>
+			<span>
+				<span><?=$_SESSION['user_email']?></span>
+			</span>
+		</div>
+
+		<div class="twPc-divStats">
+			<ul class="twPc-Arrange">
+				<li class="twPc-ArrangeSizeFit">
+					<a href="./profile.php?u=<?=$_SESSION['user_name']?>">
+						<span class="twPc-StatLabel twPc-block">Posts</span>
+						<span class="twPc-StatValue"><?=$rowPost['COUNT(*)']?></span>
+					</a>
+				</li>
+				<li class="twPc-ArrangeSizeFit">
+					<a href="#">
+						<span class="twPc-StatLabel twPc-block">Following</span>
+						<span class="twPc-StatValue"><?=$rowfollowing['COUNT(*)']?></span>
+					</a>
+				</li>
+				<li class="twPc-ArrangeSizeFit">
+					<a href="#">
+						<span class="twPc-StatLabel twPc-block">Followers</span>
+						<span class="twPc-StatValue"><?=$rowfollower['COUNT(*)']?></span>
+					</a>
+				</li>
+			</ul>
+		</div>
         </div>
+        </div>
+        </div>
+        
+
+
+
+		
+      
       </aside>
 
       <div class="col-sm-8 ml-sm-auto blog-main">
@@ -157,14 +180,24 @@ if (isset($_GET['user_id_follow'])) {
                 
               </div>
               <div class="col-md-10">
-                <p class="blog-post-meta"><a href="./profile.php?u=<?=$row['user_name']?>"><?=$row['user_name']?></a>  : <?=$row['datetime']?>
+                <p class="blog-post-meta"><a href="./profile.php?u=<?=$row['user_name']?>"><b style="color:#000;">@<?=$row['user_name']?></b></a>
+                <small style="float:right;"><?=$row['datetime']?>
                   
                   <?php if ($row['user_name'] == $_SESSION['user_name']) {?>
-                    <a href="./?topid=<?=$row['topic_id']?>" class=""> <i class="fa fa-trash  fa-fw fa-lg" aria-hidden="true"></i></a>
-                    <a href="#" data-toggle="modal" data-target="#<?=$row['topic_id']?>"> <i class="fa fa-pencil-square-o fa-fw fa-lg" aria-hidden="true"></i></a>
+                   <div class="dropdown">
+                      <button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-cog" aria-hidden="true"></i> Options
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#<?=$row['topic_id']?>">Edit</a>
+                        <a href="./?topid=<?=$row['topic_id']?>" class="dropdown-item">Delete</a>
+                    
+                      </div>
+                    </div>
                   <?php } ?>
-                  
+                  </small>
                 </p>
+                <hr>
                 <p><?=$row['topic_content']?>
                 </p>
               </div>

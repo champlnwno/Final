@@ -107,6 +107,7 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             $sql="UPDATE `account` SET `user_avatar` = '$target_file' WHERE `account`.`user_id` = ".$_SESSION['user_id'].";";
             $query= mysqli_query($link, $sql);
+            $_SESSION['user_avatar']=$target_file;
             if ($query) {
               header("Location:profile.php?u=".$row['user_name']."");                                       
             }
@@ -236,14 +237,25 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
                 <img src="<?=$row['user_avatar']?>" class="img-thumbnail circle" alt="">
               </div>
               <div class="col-md-10">
-                <p class="blog-post-meta"><a href="./profile.php?u=<?=$row['user_name']?>"><?=$row['user_name']?></a>  : <?=$row['datetime']?>
+                <p class="blog-post-meta"><a href="./profile.php?u=<?=$row['user_name']?>"><b style="color:#000;">@<?=$row['user_name']?></b></a>
+                <small style="float:right;"><?=$row['datetime']?>
                   
                   <?php if ($row['user_name'] == $_SESSION['user_name']) {?>
-                    <a href="./profile.php?u=<?=$row['user_name']?>&topid=<?=$row['topic_id']?>" class=""> <i class="fa fa-trash  fa-fw fa-lg" aria-hidden="true"></i></a>
-                    <a href="#" data-toggle="modal" data-target="#<?=$row['topic_id']?>"> <i class="fa fa-pencil-square-o fa-fw fa-lg" aria-hidden="true"></i></a>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-cog" aria-hidden="true"></i> Options
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#<?=$row['topic_id']?>">Edit</a>
+                        <a href="./?topid=<?=$row['topic_id']?>" class="dropdown-item">Delete</a>
+                    
+                      </div>
+                    </div>
+                    
                   <?php } ?>
-                  
+                  </small>
                 </p>
+                <hr>
                 <p><?=$row['topic_content']?>
                 </p>
               </div>
