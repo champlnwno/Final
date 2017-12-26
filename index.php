@@ -48,11 +48,17 @@ $rowfollowing = mysqli_fetch_assoc($resultfollowing);
 if (isset($_POST['likenow'])) {
  $sql="INSERT INTO `favorite` (`user_id`, `topic_id`) VALUES ('".$_SESSION['user_id']."', '".$_POST['top_id_like']."');";
   $result= mysqli_query($link, $sql);
+  if ($result) {
+     header("Location:index.php");                                       
+  }
 }
 
 if (isset($_POST['unlikenow'])) {
   $sql = "DELETE FROM `favorite` WHERE `favorite`.`user_id` = ".$_SESSION['user_id']." AND `favorite`.`topic_id` = ".$_POST['top_id_unlike']."";
   $result= mysqli_query($link, $sql);
+  if ($result) {
+     header("Location:index.php");                                       
+  }
 
 }
 if (isset($_GET['user_id_unfollow'])) {
@@ -227,7 +233,7 @@ if (isset($_GET['user_id_follow'])) {
                 <form method="post">
                   <input type="hidden" name="top_id_unlike" value="<?=$row['topic_id']?>">
                   <button type="submit" name="unlikenow" class="btn btn-light btn-block">
-                  <i class="fa fa-heart fa-fw fa-lg" aria-hidden="true"></i>
+                  <i class="fa fa-heart fa-fw fa-lg" style="color: red" aria-hidden="true"></i>
                   Unlike (<?=$rowd['COUNT(*)']?>)</button>
                 </form>
                 <?php }?>
