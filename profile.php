@@ -22,7 +22,7 @@ if (isset($_POST['post_top'])&& $_POST['content'] != null && $_POST['content'] !
 
 }
 
-if (isset($_POST['post_top_update'])) {
+if (isset($_POST['post_top_update']) && $_POST['content_update'] != null && $_POST['content_update'] != '') {
   $sqlup = "UPDATE `topic` SET `topic_content` = '".$_POST['content_update']."' WHERE `topic`.`topic_id` = ".$_POST['top_id_update']." AND `topic`.`user_id` = ".$_SESSION['user_id'].";";
   $results= mysqli_query($link, $sqlup);
   if ($result) {
