@@ -13,7 +13,7 @@ if (isset($_GET['u'])) {
   $row = mysqli_fetch_assoc($query);
 }
 
-if (isset($_POST['post_top'])) {
+if (isset($_POST['post_top'])&& $_POST['content'] != null && $_POST['content'] != '') {
   $sql="INSERT INTO `topic` (`topic_id`, `user_id`, `img_id`, `topic_name`, `topic_content`, `datetime`) VALUES (NULL, ".$_SESSION['user_id'].", '1', '', '".$_POST['content']."', now());";
   $result= mysqli_query($link, $sql);
   if ($result) {
