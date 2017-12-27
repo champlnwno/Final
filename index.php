@@ -75,6 +75,29 @@ if (isset($_GET['user_id_follow'])) {
      header("Location:index.php");                                       
   }
 }
+if (isset($_POST['commentbtn']) && isset($_POST['comment_content'])) {
+    $comment_content = $_POST['comment_content'];
+    $comment_topic = $_POST['comment_topic'];
+
+    $sql="INSERT INTO `comment` (`comment_id`, `comment_content`, `comment_datetime`) VALUES (NULL, '$comment_content', now());";
+    mysqli_query($link, $sql);
+    $last_id = $link->insert_id;
+
+    $sql="INSERT INTO `post` (`topic_id`, `comment_id`, `user_id`) VALUES ($comment_topic, $last_id, ".$_SESSION['user_id'].");";
+    $result = mysqli_query($link, $sql);
+     if ($result) {
+     header("Location:index.php?comm=autofocus&aria_ex=true&id=$comment_topic");                                       
+  }
+  }
+
+  if (isset($_GET['del_comment'])) {
+  $sql = "DELETE FROM `comment` WHERE `comment`.`comment_id` = ".$_GET['del_comment'].";";
+   $post = $_GET['post'];
+  $result= mysqli_query($link, $sql);
+  if ($result) {
+     header("Location:index.php?comm=autofocus&aria_ex=true&id=$post");                                       
+  }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -87,7 +110,12 @@ if (isset($_GET['user_id_follow'])) {
     crossorigin="anonymous">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="css/stylemain.css" rel="stylesheet">
-
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -99,54 +127,64 @@ if (isset($_GET['user_id_follow'])) {
     <div class="row">
       <aside class="col-sm-4 blog-sidebar">
         <div class="sidebar-module sidebar-module-inset">
-          
-  <div class="row">
-        <div class="col-md-12">
-        <a class="twPc-bg twPc-block"></a>
-        <a href="./profile.php?u=<?=$_SESSION['user_name']?>" class="twPc-avatarLink">
-			<img src="<?=$_SESSION['user_avatar']?>" class="twPc-avatarImg">
-		</a>
 
-		<div class="twPc-divUser">
-			<div class="twPc-divName">
-				<a href="./profile.php?u=<?=$_SESSION['user_name']?>">@<?=$_SESSION['user_name']?></a>
-			</div>
-			<span>
-				<span><?=$_SESSION['user_email']?></span>
-			</span>
-		</div>
+          <div class="row">
+            <div class="col-md-12">
+              <a class="twPc-bg twPc-block"></a>
+              <a href="./profile.php?u=<?=$_SESSION['user_name']?>" class="twPc-avatarLink">
+                <img src="<?=$_SESSION['user_avatar']?>" class="twPc-avatarImg">
+              </a>
 
-		<div class="twPc-divStats">
-			<ul class="twPc-Arrange">
-				<li class="twPc-ArrangeSizeFit">
-					<a href="./profile.php?u=<?=$_SESSION['user_name']?>">
-						<span class="twPc-StatLabel twPc-block">Posts</span>
-						<span class="twPc-StatValue"><?=$rowPost['COUNT(*)']?></span>
-					</a>
-				</li>
-				<li class="twPc-ArrangeSizeFit">
-					<a href="#">
-						<span class="twPc-StatLabel twPc-block">Following</span>
-						<span class="twPc-StatValue"><?=$rowfollowing['COUNT(*)']?></span>
-					</a>
-				</li>
-				<li class="twPc-ArrangeSizeFit">
-					<a href="#">
-						<span class="twPc-StatLabel twPc-block">Followers</span>
-						<span class="twPc-StatValue"><?=$rowfollower['COUNT(*)']?></span>
-					</a>
-				</li>
-			</ul>
-		</div>
+              <div class="twPc-divUser">
+                <div class="twPc-divName">
+                  <a href="./profile.php?u=<?=$_SESSION['user_name']?>">@
+                    <?=$_SESSION['user_name']?>
+                  </a>
+                </div>
+                <span>
+                  <span>
+                    <?=$_SESSION['user_email']?>
+                  </span>
+                </span>
+              </div>
+
+              <div class="twPc-divStats">
+                <ul class="twPc-Arrange">
+                  <li class="twPc-ArrangeSizeFit">
+                    <a href="./profile.php?u=<?=$_SESSION['user_name']?>">
+                      <span class="twPc-StatLabel twPc-block">Posts</span>
+                      <span class="twPc-StatValue">
+                        <?=$rowPost['COUNT(*)']?>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="twPc-ArrangeSizeFit">
+                    <a href="#">
+                      <span class="twPc-StatLabel twPc-block">Following</span>
+                      <span class="twPc-StatValue">
+                        <?=$rowfollowing['COUNT(*)']?>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="twPc-ArrangeSizeFit">
+                    <a href="#">
+                      <span class="twPc-StatLabel twPc-block">Followers</span>
+                      <span class="twPc-StatValue">
+                        <?=$rowfollower['COUNT(*)']?>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
-        </div>
-        
 
 
 
-		
-      
+
+
+
       </aside>
 
       <div class="col-sm-8 ml-sm-auto blog-main">
@@ -175,36 +213,48 @@ if (isset($_GET['user_id_follow'])) {
           <div class="card-body">
             <div class="row">
               <div class="col-md-2">
-                <a href="./profile.php?u=<?=$row['user_name']?>"><img style="width: 100%" src="<?=$row['user_avatar']?>" class="img-thumbnail circle" alt=""></a>
+                <a href="./profile.php?u=<?=$row['user_name']?>">
+                  <img style="width: 100%" src="<?=$row['user_avatar']?>" class="img-thumbnail circle" alt="">
+                </a>
                 <?php if ($row['user_id'] != $_SESSION['user_id']) {?>
                 <?php if($rowd['COUNT(*)'] == 0) {?>
-                  <a href="?user_id_follow=<?=$row['user_id']?>" class="btn btn-danger btn-sm btn-block">Follow</a>
+                <a href="?user_id_follow=<?=$row['user_id']?>" class="btn btn-danger btn-sm btn-block">Follow</a>
                 <?php } else {?>
-                  <a href="?user_id_unfollow=<?=$row['user_id']?>" class="btn btn-outline-danger btn-sm btn-block">Unfollow</a>
+                <a href="?user_id_unfollow=<?=$row['user_id']?>" class="btn btn-outline-danger btn-sm btn-block">Unfollow</a>
                 <?php } ?>
                 <?php }?>
-                
+
               </div>
               <div class="col-md-10">
-                <p class="blog-post-meta"><a href="./profile.php?u=<?=$row['user_name']?>"><b style="color:#000;">@<?=$row['user_name']?></b></a>
-                <small style="float:right;"><a href="post.php?post_id=<?=$row['topic_id']?>"><?=$row['datetime']?></a>
-                  
-                  <?php if ($row['user_name'] == $_SESSION['user_name']) {?>
-                   <div class="dropdown">
-                      <button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <p class="blog-post-meta">
+                  <a href="./profile.php?u=<?=$row['user_name']?>">
+                    <b style="color:#000;">@
+                      <?=$row['user_name']?>
+                    </b>
+                  </a>
+                  <small style="float:right;">
+
+                      <?=$row['datetime']?>
+      
+
+                    <?php if ($row['user_name'] == $_SESSION['user_name']) {?>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         <i class="fa fa-cog" aria-hidden="true"></i> Options
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#<?=$row['topic_id']?>">Edit</a>
                         <a href="./?topid=<?=$row['topic_id']?>" class="dropdown-item">Delete</a>
-                    
+
                       </div>
                     </div>
-                  <?php } ?>
+                    <?php } ?>
                   </small>
                 </p>
                 <hr>
-                <p><?=$row['topic_content']?>
+                <p>
+                  <?=$row['topic_content']?>
                 </p>
               </div>
             </div>
@@ -226,20 +276,22 @@ if (isset($_GET['user_id_follow'])) {
                 <form method="post">
                   <input type="hidden" name="top_id_like" value="<?=$row['topic_id']?>">
                   <button type="submit" name="likenow" class="btn btn-light btn-block">
-                  <i class="fa fa-heart-o fa-fw fa-lg" aria-hidden="true"></i>
-                  Like (<?=$rowd['COUNT(*)']?>)</button>
+                    <i class="fa fa-heart-o fa-fw fa-lg" aria-hidden="true"></i>
+                    Like (
+                    <?=$rowd['COUNT(*)']?>)</button>
                 </form>
                 <?php } else {?>
                 <form method="post">
                   <input type="hidden" name="top_id_unlike" value="<?=$row['topic_id']?>">
                   <button type="submit" name="unlikenow" class="btn btn-light btn-block">
-                  <i class="fa fa-heart fa-fw fa-lg" style="color: red" aria-hidden="true"></i>
-                  Unlike (<?=$rowd['COUNT(*)']?>)</button>
+                    <i class="fa fa-heart fa-fw fa-lg" style="color: red" aria-hidden="true"></i>
+                    Unlike (
+                    <?=$rowd['COUNT(*)']?>)</button>
                 </form>
                 <?php }?>
               </div>
               <div class="col-md-4">
-                <button type="button" class="btn btn-light btn-block">
+                <button type="button" class="btn btn-light btn-block" data-toggle="collapse" data-target="#comment<?=$row['topic_id']?>">
                   <i class="fa fa-commenting-o fa-fw fa-lg" aria-hidden="true"></i>
                   Comment</button>
               </div>
@@ -247,6 +299,63 @@ if (isset($_GET['user_id_follow'])) {
                 <button type="button" class="btn btn-light btn-block">
                   <i class="fa fa-share-square-o fa-fw fa-lg" aria-hidden="true"></i>
                   Share</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <?php if (isset($_GET['aria_ex']) && $_GET['id'] == $row['topic_id']) {?>
+                <script>
+                  $(document).ready(function () {
+                    $("#comment<?=$row['topic_id']?>").collapse('show');
+                    $('#comment<?=$row['topic_id']?>').focus(function () {
+                      var ele = $(this);
+                      $('html, body').animate({
+                        scrollTop: ele.offset().top - 80
+                      }, 800);
+                    });
+                  });
+
+                </script>
+                <?php }?>
+                <div id="comment<?=$row['topic_id']?>" class="collapse">
+                  <br>
+                  <form method="POST">
+
+                    <textarea <?php if (isset($_GET['aria_ex']) && $_GET['id']==$row['topic_id']) { echo "autofocus='true'";}?> name="comment_content" class="form-control" cols="47" rows="2" placeholder="Write a comment..."></textarea>
+                    <input type="hidden" name="comment_topic" value="<?=$row['topic_id']?>">
+                    <input type="submit" name="commentbtn" class="btn btn-block btn-md btn-danger" style="margin-top: 15px" value="Comment">
+                  </form>
+                  <?php 
+                    $sqlComment = "SELECT * FROM `post` 
+                    JOIN `comment` ON `comment`.`comment_id` = `post`.`comment_id` 
+                    JOIN `account` ON `account`.`user_id` = `post`.`user_id` 
+                    WHERE `post`.`topic_id` = ".$row['topic_id']."";
+                    $queryComment = mysqli_query($link, $sqlComment, MYSQLI_STORE_RESULT) or die ("Query Error");
+               
+                    while($rowComment = mysqli_fetch_assoc($queryComment)){?>
+                  <div class="card">
+                    <div class="card-block">
+                      <div class="row">
+                        <div class="col-md-1">
+                          <img width="50" src="<?=$rowComment['user_avatar']?>" alt="">
+                        </div>
+                        <div class="col-md-10">
+                          <p style="font-size:12px;margin-bottom:0;">
+                            <b>@
+                              <?=$rowComment['user_name']?>
+                            </b> :
+                            <?=$rowComment['comment_datetime']?>
+                              <a href="?del_comment=<?=$rowComment['comment_id']?>&post=<?=$row['topic_id']?>">Delete</a>
+                          </p>
+                          <p style="font-size:12px;margin-bottom:0;">
+                            <?=$rowComment['comment_content']?>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <?php } ?>
+                </div>
               </div>
             </div>
           </div>
@@ -270,19 +379,13 @@ if (isset($_GET['user_id_follow'])) {
             </div>
           </div>
         </div>
-    <?php } if($num_row == 0) {?>
-      <p>ไม่พบรายการ</p>
-    <?php } ?>
+        <?php } if($num_row == 0) {?>
+        <p>ไม่พบรายการ</p>
+        <?php } ?>
       </div>
     </div>
-   
+
   </main>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-    crossorigin="anonymous"></script>
 </body>
 
 </html>

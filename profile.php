@@ -123,6 +123,30 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     }
 
 }
+  if (isset($_GET['del_comment'])) {
+  $sql = "DELETE FROM `comment` WHERE `comment`.`comment_id` = ".$_GET['del_comment'].";";
+   $post = $_GET['post'];
+  $result= mysqli_query($link, $sql);
+  if ($result) {
+     header("Location:profile.php?comm=autofocus&u=".$_GET['user']."&aria_ex=true&id=$post");                                      
+  }
+}
+if (isset($_POST['commentbtn']) && isset($_POST['comment_content'])) {
+    $comment_content = $_POST['comment_content'];
+    $comment_topic = $_POST['comment_topic'];
+
+    $sql="INSERT INTO `comment` (`comment_id`, `comment_content`, `comment_datetime`) VALUES (NULL, '$comment_content', now());";
+    mysqli_query($link, $sql);
+    $last_id = $link->insert_id;
+
+    $sql="INSERT INTO `post` (`topic_id`, `comment_id`, `user_id`) VALUES ($comment_topic, $last_id, ".$_SESSION['user_id'].");";
+    $result = mysqli_query($link, $sql);
+     if ($result) {
+     header("Location:profile.php?comm=autofocus&u=".$row['user_name']."&aria_ex=true&id=$comment_topic");                                       
+  }
+  }
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -135,7 +159,12 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     crossorigin="anonymous">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="css/stylemain.css" rel="stylesheet">
-
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -243,7 +272,7 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
               </div>
               <div class="col-md-10">
                 <p class="blog-post-meta"><a href="./profile.php?u=<?=$row['user_name']?>"><b style="color:#000;">@<?=$row['user_name']?></b></a>
-                 <small style="float:right;"><a href="post.php?post_id=<?=$row['topic_id']?>"><?=$row['datetime']?></a>
+                 <small style="float:right;"><?=$row['datetime']?>
                   
                   <?php if ($row['user_name'] == $_SESSION['user_name']) {?>
                     <div class="dropdown">
@@ -296,7 +325,7 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
                 <?php }?>
               </div>
               <div class="col-md-4">
-                <button type="button" class="btn btn-light btn-block">
+                <button type="button" class="btn btn-light btn-block" data-toggle="collapse" data-target="#comment<?=$row['topic_id']?>">
                   <i class="fa fa-commenting-o fa-fw fa-lg" aria-hidden="true"></i>
                   Comment</button>
               </div>
@@ -304,6 +333,63 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
                 <button type="button" class="btn btn-light btn-block">
                   <i class="fa fa-share-square-o fa-fw fa-lg" aria-hidden="true"></i>
                   Share</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <?php if (isset($_GET['aria_ex']) && $_GET['id'] == $row['topic_id']) {?>
+                <script>
+                  $(document).ready(function () {
+                    $("#comment<?=$row['topic_id']?>").collapse('show');
+                    $('#comment<?=$row['topic_id']?>').focus(function () {
+                      var ele = $(this);
+                      $('html, body').animate({
+                        scrollTop: ele.offset().top - 80
+                      }, 800);
+                    });
+                  });
+
+                </script>
+                <?php }?>
+                <div id="comment<?=$row['topic_id']?>" class="collapse">
+                  <br>
+                  <form method="POST">
+
+                    <textarea <?php if (isset($_GET['aria_ex']) && $_GET['id']==$row['topic_id']) { echo "autofocus='true'";}?> name="comment_content" class="form-control" cols="47" rows="2" placeholder="Write a comment..."></textarea>
+                    <input type="hidden" name="comment_topic" value="<?=$row['topic_id']?>">
+                    <input type="submit" name="commentbtn" class="btn btn-block btn-md btn-danger" style="margin-top: 15px" value="Comment">
+                  </form>
+                  <?php 
+                    $sqlComment = "SELECT * FROM `post` 
+                    JOIN `comment` ON `comment`.`comment_id` = `post`.`comment_id` 
+                    JOIN `account` ON `account`.`user_id` = `post`.`user_id` 
+                    WHERE `post`.`topic_id` = ".$row['topic_id']."";
+                    $queryComment = mysqli_query($link, $sqlComment, MYSQLI_STORE_RESULT) or die ("Query Error");
+        
+                    while($rowComment = mysqli_fetch_assoc($queryComment)){?>
+                  <div class="card">
+                    <div class="card-block">
+                      <div class="row">
+                        <div class="col-md-1">
+                          <img width="50" src="<?=$rowComment['user_avatar']?>" alt="">
+                        </div>
+                        <div class="col-md-10">
+                          <p style="font-size:12px;margin-bottom:0;">
+                            <b>@
+                              <?=$rowComment['user_name']?>
+                            </b> :
+                            <?=$rowComment['comment_datetime']?>
+                              <a href="?del_comment=<?=$rowComment['comment_id']?>&post=<?=$row['topic_id']?>&user=<?=$row['user_name']?>">Delete</a>
+                          </p>
+                          <p style="font-size:12px;margin-bottom:0;">
+                            <?=$rowComment['comment_content']?>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <?php } ?>
+                </div>
               </div>
             </div>
           </div>
@@ -335,12 +421,6 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     </div>
 
   </main>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-    crossorigin="anonymous"></script>
 </body>
 
 </html>
