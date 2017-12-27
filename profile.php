@@ -243,7 +243,7 @@ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
               </div>
               <div class="col-md-10">
                 <p class="blog-post-meta"><a href="./profile.php?u=<?=$row['user_name']?>"><b style="color:#000;">@<?=$row['user_name']?></b></a>
-                <small style="float:right;"><?=$row['datetime']?>
+                 <small style="float:right;"><a href="post.php?post_id=<?=$row['topic_id']?>"><?=$row['datetime']?></a>
                   
                   <?php if ($row['user_name'] == $_SESSION['user_name']) {?>
                     <div class="dropdown">
